@@ -40,6 +40,7 @@ import com.example.myapplication.viewmodel.RecipeViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<RecipeViewModel>()
+    private var navController: NavHostController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,22 +48,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MainContent(viewModel)
+                    navController = rememberNavController()
+                    MainContent(viewModel, navController!!)
                 }
             }
-        }
-    }
-
-    override fun onBackPressed() {
-        if (::navController.isInitialized && !navController.popBackStack()) {
-            super.onBackPressed()
         }
     }
 }
 
 @Composable
-fun MainContent(viewModel: RecipeViewModel) {
-    val navController = rememberNavController()
+fun MainContent(viewModel: RecipeViewModel, navController: NavHostController) {
     NavGraph(navController, viewModel)
 }
 
